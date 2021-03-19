@@ -25,7 +25,7 @@ def main():
             for i in range(len(Server_IP_list)):
                 aios.getRoot(Server_IP_list[i])
 
-            i = 0;
+            i = 0
             enableSuccess = aios.enable(Server_IP_list[i], 1)
             print('\n')
 
@@ -34,7 +34,7 @@ def main():
                 aios.trapezoidalMove(0, True, Server_IP_list[i], 1)
                 time.sleep( 4 )
 
-                aios.controlMode(2, Server_IP_list[i], 1)
+                aios.controlMode(aios.ControlMode.VELOCITY_CONTROL.value, Server_IP_list[i], 1)
                 aios.velRampEnable(True, Server_IP_list[i], 1)
 
 

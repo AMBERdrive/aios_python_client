@@ -21,13 +21,13 @@ def main():
             aios.getTrapTraj(Server_IP_list[i], 1)
         print('\n')
 
-        dict = {
+        trap_traj_param = {
             'accel_limit' : 80000,
             'decel_limit' : 80000,
             'vel_limit' : 200000
         }
         for i in range(len(Server_IP_list)):
-            aios.setTrapTraj(dict, Server_IP_list[i], 1)
+            aios.setTrapTraj(trap_traj_param, Server_IP_list[i], 1)
         print('\n')
 
         for i in range(len(Server_IP_list)):
