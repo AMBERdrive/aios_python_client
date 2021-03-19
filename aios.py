@@ -31,13 +31,13 @@ s.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
 PORT_rt = 2333  # Real-time control data port, ie. speed, position, current and other real-time data
 PORT_srv = 2334 # Low priority service data port. ie, parameter setting and reading
 
-
+buf_size = 1024
 # s.bind(('', PORT_srv))
 
 #network = '10.0.0.255'
-network = '255.255.255.255'
+network = '192.168.102.255'
 
-print('Listening for broadcast at ', s.getsockname())
+# print('Listening for broadcast at ', s.getsockname())
 
 # AIOS enable
 # Parameters: including device IP and motor number
@@ -56,7 +56,7 @@ def enable(server_ip, motor_number):
     print ("Send JSON Obj:", json_str)
     s.sendto(str.encode(json_str), (server_ip, PORT_srv))
     try:
-        data, address = s.recvfrom(1024)
+        data, address = s.recvfrom(buf_size)
         print('Server received from {}:{}'.format(address, data.decode('utf-8')))
         json_obj = json.loads(data.decode('utf-8'))
     except socket.timeout: # fail after 1 second of no activity
@@ -88,12 +88,14 @@ def disable(server_ip, motor_number):
     s.sendto(str.encode(json_str), (server_ip, PORT_srv))
 
     try:
-        data, address = s.recvfrom(1024)
+        data, address = s.recvfrom(buf_size)
         print('Server received from {}:{}'.format(address, data.decode('utf-8')))
         json_obj = json.loads(data.decode('utf-8'))
     except socket.timeout: # fail after 1 second of no activity
         print("Didn't receive anymore data! [Timeout]")
+        return False
 
+    return True
 
 # AIOS Get current status
 # Parameters: including device IP
@@ -112,7 +114,7 @@ def getState(server_ip, motor_number):
     s.sendto(str.encode(json_str), (server_ip, PORT_srv))
 
     try:
-        data, address = s.recvfrom(1024)
+        data, address = s.recvfrom(buf_size)
         print('Server received from {}:{}'.format(address, data.decode('utf-8')))
         json_obj = json.loads(data.decode('utf-8'))
     except socket.timeout: # fail after 1 second of no activity
@@ -130,11 +132,13 @@ def getRoot(server_ip):
     print ("Send JSON Obj:", json_str)
     s.sendto(str.encode(json_str), (server_ip, PORT_srv))
     try:
-        data, address = s.recvfrom(1024)
+        data, address = s.recvfrom(buf_size)
         print('Server received from {}:{}'.format(address, data.decode('utf-8')))
         json_obj = json.loads(data.decode('utf-8'))
     except socket.timeout: # fail after 1 second of no activity
         print("Didn't receive anymore data! [Timeout]")
+        return False
+    return True
 
 # AIOS Get Root Config property
 # Parameters: including device IP
@@ -148,7 +152,7 @@ def getRootConfig(server_ip):
     print ("Send JSON Obj:", json_str)
     s.sendto(str.encode(json_str), (server_ip, PORT_srv))
     try:
-        data, address = s.recvfrom(1024)
+        data, address = s.recvfrom(buf_size)
         print('Server received from {}:{}'.format(address, data.decode('utf-8')))
         json_obj = json.loads(data.decode('utf-8'))
     except socket.timeout: # fail after 1 second of no activity
@@ -170,7 +174,7 @@ def setRootConfig(dict, server_ip):
     print ("Send JSON Obj:", json_str)
     s.sendto(str.encode(json_str), (server_ip, PORT_srv))
     try:
-        data, address = s.recvfrom(1024)
+        data, address = s.recvfrom(buf_size)
         print('Server received from {}:{}'.format(address, data.decode('utf-8')))
         json_obj = json.loads(data.decode('utf-8'))
     except socket.timeout: # fail after 1 second of no activity
@@ -188,7 +192,7 @@ def saveConfig(server_ip):
     print ("Send JSON Obj:", json_str)
     s.sendto(str.encode(json_str), (server_ip, PORT_srv))
     try:
-        data, address = s.recvfrom(1024)
+        data, address = s.recvfrom(buf_size)
         print('Server received from {}:{}'.format(address, data.decode('utf-8')))
         json_obj = json.loads(data.decode('utf-8'))
     except socket.timeout: # fail after 1 second of no activity
@@ -206,7 +210,7 @@ def eraseConfig(server_ip):
     print ("Send JSON Obj:", json_str)
     s.sendto(str.encode(json_str), (server_ip, PORT_srv))
     try:
-        data, address = s.recvfrom(1024)
+        data, address = s.recvfrom(buf_size)
         print('Server received from {}:{}'.format(address, data.decode('utf-8')))
         json_obj = json.loads(data.decode('utf-8'))
     except socket.timeout: # fail after 1 second of no activity
@@ -224,7 +228,7 @@ def reboot(server_ip):
     print ("Send JSON Obj:", json_str)
     s.sendto(str.encode(json_str), (server_ip, PORT_srv))
     try:
-        data, address = s.recvfrom(1024)
+        data, address = s.recvfrom(buf_size)
         print('Server received from {}:{}'.format(address, data.decode('utf-8')))
         json_obj = json.loads(data.decode('utf-8'))
     except socket.timeout: # fail after 1 second of no activity
@@ -242,7 +246,7 @@ def rebootMotorDrive(server_ip):
     print ("Send JSON Obj:", json_str)
     s.sendto(str.encode(json_str), (server_ip, PORT_srv))
     try:
-        data, address = s.recvfrom(1024)
+        data, address = s.recvfrom(buf_size)
         print('Server received from {}:{}'.format(address, data.decode('utf-8')))
         json_obj = json.loads(data.decode('utf-8'))
     except socket.timeout: # fail after 1 second of no activity
@@ -260,7 +264,7 @@ def OTAupdate(server_ip):
     print ("Send JSON Obj:", json_str)
     s.sendto(str.encode(json_str), (server_ip, PORT_srv))
     try:
-        data, address = s.recvfrom(1024)
+        data, address = s.recvfrom(buf_size)
         print('Server received from {}:{}'.format(address, data.decode('utf-8')))
         json_obj = json.loads(data.decode('utf-8'))
     except socket.timeout: # fail after 1 second of no activity
@@ -268,6 +272,7 @@ def OTAupdate(server_ip):
 
 # AIOS Get error code
 # Parameters: including server IP
+# Return True or False
 def getError(server_ip, motor_number):
     data = {
         'method' : 'GET',
@@ -281,14 +286,17 @@ def getError(server_ip, motor_number):
     print ("Send JSON Obj:", json_str)
     s.sendto(str.encode(json_str), (server_ip, PORT_srv))
     try:
-        data, address = s.recvfrom(1024)
+        data, address = s.recvfrom(buf_size)
         print('Server received from {}:{}'.format(address, data.decode('utf-8')))
         json_obj = json.loads(data.decode('utf-8'))
     except socket.timeout: # fail after 1 second of no activity
         print("Didn't receive anymore data! [Timeout]")
+        return False
+    return True
 
 # AIOS Remove error
 # Parameters: including server IP
+# Return True or False
 def clearError(server_ip, motor_number):
     data = {
         'method' : 'SET',
@@ -303,15 +311,17 @@ def clearError(server_ip, motor_number):
     print ("Send JSON Obj:", json_str)
     s.sendto(str.encode(json_str), (server_ip, PORT_srv))
     try:
-        data, address = s.recvfrom(1024)
+        data, address = s.recvfrom(buf_size)
         print('Server received from {}:{}'.format(address, data.decode('utf-8')))
         json_obj = json.loads(data.decode('utf-8'))
     except socket.timeout: # fail after 1 second of no activity
         print("Didn't receive anymore data! [Timeout]")
+        return False
+    return True
 
 # AIOS Get actuator position, speed, current
 # Parameters: including server ip，motor number
-# Return position, speed, current in tuple
+# Success Return position, speed, current in tuple, Failed return empty list 
 def getCVP(server_ip, motor_number):
     data = {
         'method' : 'GET',
@@ -325,13 +335,14 @@ def getCVP(server_ip, motor_number):
     # print ("Send JSON Obj:", json_str)
     s.sendto(str.encode(json_str), (server_ip, PORT_rt))
     try:
-        data, address = s.recvfrom(1024)
+        data, address = s.recvfrom(buf_size)
         # print('Server received from {}:{}'.format(address, data.decode('utf-8')))
         json_obj = json.loads(data.decode('utf-8'))
         if json_obj.get('status') == 'OK':
             return json_obj.get('position'), json_obj.get('velocity'), json_obj.get('current')
     except socket.timeout: # fail after 1 second of no activity
         print("Didn't receive anymore data! [Timeout]")
+    return []
 
 
 # AIOS test if the encoder is ready or not (If not ready, perform encoder calibration)
@@ -350,7 +361,7 @@ def encoderIsReady(server_ip, motor_number):
     print ("Send JSON Obj:", json_str)
     s.sendto(str.encode(json_str), (server_ip, PORT_srv))
     try:
-        data, address = s.recvfrom(1024)
+        data, address = s.recvfrom(buf_size)
         print('Server received from {}:{}'.format(address, data.decode('utf-8')))
         json_obj = json.loads(data.decode('utf-8'))
     except socket.timeout: # fail after 1 second of no activity
@@ -368,7 +379,7 @@ def controlMode(ctrlMode, server_ip, motor_number):
     data = {
         'method' : 'SET',
         'reqTarget' : '/m0/controller/config',
-        'control_mode' : 3
+        'control_mode' : ControlMode.POSITION_CONTROL.value
     }
     if motor_number == 0:
         data['reqTarget'] = '/m0/controller/config'
@@ -380,11 +391,13 @@ def controlMode(ctrlMode, server_ip, motor_number):
     print ("Send JSON Obj:", json_str)
     s.sendto(str.encode(json_str), (server_ip, PORT_srv))
     try:
-        data, address = s.recvfrom(1024)
+        data, address = s.recvfrom(buf_size)
         print('Server received from {}:{}'.format(address, data.decode('utf-8')))
         json_obj = json.loads(data.decode('utf-8'))
     except socket.timeout: # fail after 1 second of no activity
         print("Didn't receive anymore data! [Timeout]")
+        return False
+    return True
 
 # AIOS reset linear count
 # Parameters: including server ip，motor number
@@ -405,7 +418,7 @@ def setLinearCount(set_linear_count, server_ip, motor_number):
     print ("Send JSON Obj:", json_str)
     s.sendto(str.encode(json_str), (server_ip, PORT_srv))
     try:
-        data, address = s.recvfrom(1024)
+        data, address = s.recvfrom(buf_size)
         print('Server received from {}:{}'.format(address, data.decode('utf-8')))
         json_obj = json.loads(data.decode('utf-8'))
     except socket.timeout: # fail after 1 second of no activity
@@ -428,18 +441,19 @@ def getMotionCtrlConfig(server_ip, motor_number):
     print ("Send JSON Obj:", json_str)
     s.sendto(str.encode(json_str), (server_ip, PORT_srv))
     try:
-        data, address = s.recvfrom(1024)
+        data, address = s.recvfrom(buf_size)
         print('Server received from {}:{}'.format(address, data.decode('utf-8')))
         json_obj = json.loads(data.decode('utf-8'))
         if json_obj.get('status') == 'OK':
             return json_obj.get('control_mode'), json_obj.get('pos_gain'), json_obj.get('vel_gain'), json_obj.get('vel_integrator_gain'), json_obj.get('vel_limit'), json_obj.get('vel_limit_tolerance')
     except socket.timeout: # fail after 1 second of no activity
         print("Didn't receive anymore data! [Timeout]")
+    return []
 
 # AIOS Get actuator PID controller parameters
 # parameter: Position proportional gain Speed proportional gain Speed integral gain Speed limit Speed limit tolerance
 # return success or fail
-def setMotionCtrlConfig(dict, server_ip, motor_number):
+def setMotionCtrlConfig(motion_controller_config_param, server_ip, motor_number):
     data = {
         'method' : 'SET',
         'reqTarget' : '/m0/controller/config',
@@ -453,20 +467,18 @@ def setMotionCtrlConfig(dict, server_ip, motor_number):
         data['reqTarget'] = '/m0/controller/config'
     elif motor_number == 1:
         data['reqTarget'] = '/m1/controller/config'
-    data['pos_gain'] = dict['pos_gain']
-    data['vel_gain'] = dict['vel_gain']
-    data['vel_integrator_gain'] = dict['vel_integrator_gain']
-    data['vel_limit'] = dict['vel_limit']
-    data['vel_limit_tolerance'] = dict['vel_limit_tolerance']
+    data.update(motion_controller_config_param)
     json_str = json.dumps(data)
     print ("Send JSON Obj:", json_str)
     s.sendto(str.encode(json_str), (server_ip, PORT_srv))
     try:
-        data, address = s.recvfrom(1024)
+        data, address = s.recvfrom(buf_size)
         print('Server received from {}:{}'.format(address, data.decode('utf-8')))
         json_obj = json.loads(data.decode('utf-8'))
     except socket.timeout: # fail after 1 second of no activity
         print("Didn't receive anymore data! [Timeout]")
+        return False
+    return True
 
 # AIOS get actuator MotorConfig parameters
 # parameter: server ip, motor number
@@ -484,7 +496,7 @@ def getMotorConfig(server_ip, motor_number):
     print ("Send JSON Obj:", json_str)
     s.sendto(str.encode(json_str), (server_ip, PORT_srv))
     try:
-        data, address = s.recvfrom(1024)
+        data, address = s.recvfrom(buf_size)
         print('Server received from {}:{}'.format(address, data.decode('utf-8')))
         json_obj = json.loads(data.decode('utf-8'))
         if json_obj.get('status') == 'OK':
@@ -520,13 +532,14 @@ def setMotorConfig(dict, server_ip, motor_number):
     print ("Send JSON Obj:", json_str)
     s.sendto(str.encode(json_str), (server_ip, PORT_srv))
     try:
-        data, address = s.recvfrom(1024)
+        data, address = s.recvfrom(buf_size)
         print('Server received from {}:{}'.format(address, data.decode('utf-8')))
         json_obj = json.loads(data.decode('utf-8'))
         if json_obj.get('status') == 'OK':
             return json_obj.get('current_lim'), json_obj.get('current_lim_margin'), json_obj.get('inverter_temp_limit_lower'), json_obj.get('inverter_temp_limit_upper'), json_obj.get('requested_current_range'), json_obj.get('current_control_bandwidth')
     except socket.timeout: # fail after 1 second of no activity
         print("Didn't receive anymore data! [Timeout]")
+    return []
 
 # AIOS Get the trajectory parameters of actuator trapezoidal mode
 # parameter: server ip, motor number
@@ -544,18 +557,19 @@ def getTrapTraj(server_ip, motor_number):
     print ("Send JSON Obj:", json_str)
     s.sendto(str.encode(json_str), (server_ip, PORT_srv))
     try:
-        data, address = s.recvfrom(1024)
+        data, address = s.recvfrom(buf_size)
         print('Server received from {}:{}'.format(address, data.decode('utf-8')))
         json_obj = json.loads(data.decode('utf-8'))
         if json_obj.get('status') == 'OK':
             return json_obj.get('accel_limit'), json_obj.get('decel_limit'), json_obj.get('vel_limit')
     except socket.timeout: # fail after 1 second of no activity
         print("Didn't receive anymore data! [Timeout]")
+    return []
 
 # AIOS Set trajectory parameters of actuator trapezoidal mode
 # parameter：Including trapezoidal acceleration, trapezoidal deceleration, trapezoidal speed limit, device IP, motor number
 # Return success or failure as a tuple
-def setTrapTraj(dict, server_ip, motor_number):
+def setTrapTraj(trap_traj_param, server_ip, motor_number):
     data = {
         'method' : 'SET',
         'reqTarget' : '/m0/trap_traj',
@@ -567,18 +581,18 @@ def setTrapTraj(dict, server_ip, motor_number):
         data['reqTarget'] = '/m0/trap_traj'
     elif motor_number == 1:
         data['reqTarget'] = '/m1/trap_traj'
-    data['accel_limit'] = dict['accel_limit']
-    data['decel_limit'] = dict['decel_limit']
-    data['vel_limit'] = dict['vel_limit']
+    data.update(trap_traj_param)    # update parameter
     json_str = json.dumps(data)
     print ("Send JSON Obj:", json_str)
     s.sendto(str.encode(json_str), (server_ip, PORT_srv))
     try:
-        data, address = s.recvfrom(1024)
+        data, address = s.recvfrom(buf_size)
         print('Server received from {}:{}'.format(address, data.decode('utf-8')))
         json_obj = json.loads(data.decode('utf-8'))
     except socket.timeout: # fail after 1 second of no activity
         print("Didn't receive anymore data! [Timeout]")
+        return False
+    return True
 
 
 # AIOS velocity ramp enable
@@ -599,11 +613,13 @@ def velRampEnable(enable, server_ip, motor_number):
     print ("Send JSON Obj:", json_str)
     s.sendto(str.encode(json_str), (server_ip, PORT_srv))
     try:
-        data, address = s.recvfrom(1024)
+        data, address = s.recvfrom(buf_size)
         print('Server received from {}:{}'.format(address, data.decode('utf-8')))
         json_obj = json.loads(data.decode('utf-8'))
     except socket.timeout: # fail after 1 second of no activity
         print("Didn't receive anymore data! [Timeout]")
+        return False
+    return True
 
 # AIOS Speed ramp mode Set target speed
 # parameter：target velocity,server ip,motor number
@@ -623,11 +639,13 @@ def velRampTarget(target, server_ip, motor_number):
     print ("Send JSON Obj:", json_str)
     s.sendto(str.encode(json_str), (server_ip, PORT_rt))
     try:
-        data, address = s.recvfrom(1024)
+        data, address = s.recvfrom(buf_size)
         print('Server received from {}:{}'.format(address, data.decode('utf-8')))
         json_obj = json.loads(data.decode('utf-8'))
     except socket.timeout: # fail after 1 second of no activity
         print("Didn't receive anymore data! [Timeout]")
+        return False
+    return True
 
 # AIOS Set the target position of the trapezoidal motion track
 # parameter: position,reply enable,server ip,motor number
@@ -650,12 +668,14 @@ def trapezoidalMove(position, reply_enable, server_ip, motor_number):
     s.sendto(str.encode(json_str), (server_ip, PORT_rt))
     if reply_enable:
         try:
-            data, address = s.recvfrom(1024)
+            data, address = s.recvfrom(buf_size)
             # print('Server received from {}:{}'.format(address, data.decode('utf-8')))
             json_obj = json.loads(data.decode('utf-8'))
             print("Position = %.2f, Velocity = %.0f, Current = %.4f \n" %(json_obj.get('position'), json_obj.get('velocity'), json_obj.get('current')))
         except socket.timeout: # fail after 1 second of no activity
             print("Didn't receive anymore data! [Timeout]")
+            return False
+    return True
 
 
 # AIOS position control
@@ -683,7 +703,7 @@ def setPosition(position, velocity_ff, current_ff, reply_enable, server_ip, moto
     s.sendto(str.encode(json_str), (server_ip, PORT_rt))
     # if reply_enable:
     #     try:
-    #         data, address = s.recvfrom(1024)
+    #         data, address = s.recvfrom(buf_size)
     #         # print('Server received from {}:{}'.format(address, data.decode('utf-8')))
     #         json_obj = json.loads(data.decode('utf-8'))
     #         print("Position = %.2f, Velocity = %.0f, Current = %.4f \n" %(json_obj.get('position'), json_obj.get('velocity'), json_obj.get('current')))
@@ -712,12 +732,14 @@ def setVelocity(velocity, current_ff, reply_enable, server_ip, motor_number):
     s.sendto(str.encode(json_str), (server_ip, PORT_rt))
     if reply_enable:
         try:
-            data, address = s.recvfrom(1024)
+            data, address = s.recvfrom(buf_size)
             # print('Server received from {}:{}'.format(address, data.decode('utf-8')))
             json_obj = json.loads(data.decode('utf-8'))
             print("Position = %.2f, Velocity = %.0f, Current = %.4f \n" %(json_obj.get('position'), json_obj.get('velocity'), json_obj.get('current')))
         except socket.timeout: # fail after 1 second of no activity
             print("Didn't receive anymore data! [Timeout]")
+            return False
+    return True
 
 # AIOS current control
 # parameter：current, server IP, motor number
@@ -739,12 +761,14 @@ def setCurrent(current, reply_enable,server_ip, motor_number):
     s.sendto(str.encode(json_str), (server_ip, PORT_rt))
     if reply_enable:
         try:
-            data, address = s.recvfrom(1024)
+            data, address = s.recvfrom(buf_size)
             # print('Server received from {}:{}'.format(address, data.decode('utf-8')))
             json_obj = json.loads(data.decode('utf-8'))
             print("Position = %.2f, Velocity = %.0f, Current = %.4f \n" %(json_obj.get('position'), json_obj.get('velocity'), json_obj.get('current')))
         except socket.timeout: # fail after 1 second of no activity
             print("Didn't receive anymore data! [Timeout]")
+            return False
+        return True
 
 
 def dum_func(server_ip):
@@ -758,7 +782,7 @@ def dum_func(server_ip):
 
 def receive_func():
     try:
-        data, address = s.recvfrom(1024)
+        data, address = s.recvfrom(buf_size)
         print('Server received from {}:{}'.format(address, data.decode('utf-8')))
         return True
     except socket.timeout: # fail after 1 second of no activity
@@ -770,28 +794,27 @@ def receive_func():
 # parameter：PWM0_CH PWM1_CH SERVO0 SERVO1
 # Parameter value range: PWM0_CH,PWM1_CH[0~65535], SERVO0,SERVO1[0~180]
 # return AI0 AI1 DI0 DI1
-def setIOState(dict, reply_enable, server_ip):
+def setIOState(io_param, reply_enable, server_ip):
     data = {
         'method' : 'SET',
         'reqTarget' : '/IO_State',
         'reply_enable' : True
     }
     data['reply_enable'] = reply_enable
-    data['PWM0_CH'] = dict['PWM0_CH']
-    data['PWM1_CH'] = dict['PWM1_CH']
-    data['SERVO0'] = dict['SERVO0']
-    data['SERVO1'] = dict['SERVO1']
+    data.update(io_param)
     json_str = json.dumps(data)
     print ("Send JSON Obj:", json_str)
     s.sendto(str.encode(json_str), (server_ip, PORT_rt))
     if reply_enable:
         try:
-            data, address = s.recvfrom(1024)
+            data, address = s.recvfrom(buf_size)
             print('Server received from {}:{}'.format(address, data.decode('utf-8')))
             # json_obj = json.loads(data.decode('utf-8'))
             # print("Position = %.2f, Velocity = %.0f, Current = %.4f \n" %(json_obj.get('position'), json_obj.get('velocity'), json_obj.get('current')))
         except socket.timeout: # fail after 1 second of no activity
             print("Didn't receive anymore data! [Timeout]")
+            return False
+    return True
 
 # IO_Module get IO_Staten status
 # return data PWM0_CH,PWM1_CH[0~65535], SERVO0,SERVO1[0~180]
@@ -805,12 +828,14 @@ def getIOState(server_ip):
     print ("Send JSON Obj:", json_str)
     s.sendto(str.encode(json_str), (server_ip, PORT_rt))
     try:
-        data, address = s.recvfrom(1024)
+        data, address = s.recvfrom(buf_size)
         print('Server received from {}:{}'.format(address, data.decode('utf-8')))
         # json_obj = json.loads(data.decode('utf-8'))
         # print("Position = %.2f, Velocity = %.0f, Current = %.4f \n" %(json_obj.get('position'), json_obj.get('velocity'), json_obj.get('current')))
     except socket.timeout: # fail after 1 second of no activity
         print("Didn't receive anymore data! [Timeout]")
+        return False
+    return True
 
 # aios get network_setting status
 # return data
@@ -823,24 +848,23 @@ def getNetworkSetting(server_ip):
     print ("Send JSON Obj:", json_str)
     s.sendto(str.encode(json_str), (server_ip, PORT_srv))
     try:
-        data, address = s.recvfrom(1024)
+        data, address = s.recvfrom(buf_size)
         print('Server received from {}:{}'.format(address, data.decode('utf-8')))
         # json_obj = json.loads(data.decode('utf-8'))
     except socket.timeout: # fail after 1 second of no activity
         print("Didn't receive anymore data! [Timeout]")
+        return False
+    return True
 
 # aios set network_setting status
 # return data
-def setNetworkSetting(dict, server_ip):
+def setNetworkSetting(network_param, server_ip):
     data = {
         'method' : 'SET',
         'reqTarget' : '/network_setting',
         'DHCP_enable' : 'True',
     }
-    data['DHCP_enable'] = dict['DHCP_enable']
-    data['SSID'] = dict['SSID']
-    data['password'] = dict['password']
-    data['name'] = dict['name']
+    data.update(network_param)
     if dict['DHCP_enable'] == False:
         data['staticIP'] = dict['staticIP']
         data['gateway'] = dict['gateway']
@@ -851,7 +875,7 @@ def setNetworkSetting(dict, server_ip):
     print ("Send JSON Obj:", json_str)
     s.sendto(str.encode(json_str), (server_ip, PORT_srv))
     try:
-        data, address = s.recvfrom(1024)
+        data, address = s.recvfrom(buf_size)
         print('Server received from {}:{}'.format(address, data.decode('utf-8')))
         # json_obj = json.loads(data.decode('utf-8'))
         # print("Position = %.2f, Velocity = %.0f, Current = %.4f \n" %(json_obj.get('position'), json_obj.get('velocity'), json_obj.get('current')))
@@ -870,10 +894,10 @@ def broadcast_func():
     s.sendto('Is any AIOS server here?'.encode('utf-8'), (network, PORT_srv))
     print('\n')
 
-    start = time.time();
+    start = time.time()
     while True:
         try:
-            data, address = s.recvfrom(1024)
+            data, address = s.recvfrom(buf_size)
             address_list.append(address[0])
             print('Server received from {}:{}'.format(address, data.decode('utf-8')))
             json_obj = json.loads(data.decode('utf-8'))
@@ -892,3 +916,8 @@ def broadcast_func():
             break
 
     print('\n')
+
+# def print_json(data):
+#     json_obj = json.loads(data.decode('utf-8'))
+#     js = json.dumps(json_obj, indent=4)
+#     print(js)

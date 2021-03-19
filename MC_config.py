@@ -21,7 +21,7 @@ def main():
             aios.getMotionCtrlConfig(Server_IP_list[i], 1)
         print('\n')
 
-        dict = {
+        motion_controller_config_param = {
             'pos_gain' : 50,
             'vel_gain' : 0.0002,
             'vel_integrator_gain' : 0.0002,
@@ -29,7 +29,7 @@ def main():
             'vel_limit_tolerance' : 1.2,
         }
         for i in range(len(Server_IP_list)):
-            aios.setMotionCtrlConfig(dict, Server_IP_list[i], 1)
+            aios.setMotionCtrlConfig(motion_controller_config_param, Server_IP_list[i], 1)
         print('\n')
 
         for i in range(len(Server_IP_list)):

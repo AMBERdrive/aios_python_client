@@ -8,12 +8,12 @@ Server_IP_list = []
 
 def main():
 
-    Server_IP_list = aios.broadcast_func()
+    Server_IP_list = aios.broadcast_func() # 通过广播返回所有在线服务器的ip
     
     if Server_IP_list:
 
         for i in range(len(Server_IP_list)):
-            aios.getRoot(Server_IP_list[i])
+            aios.getRoot(Server_IP_list[i]) # 向所有server请求json数据报
 
 
 

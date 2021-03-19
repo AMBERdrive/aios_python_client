@@ -19,7 +19,7 @@ def main():
         time.sleep(1)
 
         for i in range(len(Server_IP_list)):
-            dict = {
+            network_param = {
                 'DHCP_enable' : True,
                 'SSID' : 'your-ssid',
                 'password' : 'your-password',
@@ -30,7 +30,7 @@ def main():
                 'dns_1' : [114,114,114,114],
                 'dns_2' : [8,8,8,8]
             }
-            aios.setNetworkSetting(dict, Server_IP_list[i])
+            aios.setNetworkSetting(network_param, Server_IP_list[i])
         print('\n')
         time.sleep(1)
 
