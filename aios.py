@@ -46,7 +46,7 @@ PORT_pt = 10000 # Passthrough port
 # network = '255.255.255.255'
 network = '192.168.2.255'
 
-print('Listening for broadcast at ', s.getsockname())
+
 
 # AIOS enable
 # Parameters: including device IP and motor number
@@ -349,8 +349,8 @@ def encoderOffsetCalibration(server_ip, motor_number):
     data = {
         'method' : 'SET',
         'reqTarget' : '/m0/requested_state',
-        # 'property' : AxisState.AXIS_STATE_ENCODER_OFFSET_CALIBRATION.value
-        'property' : AxisState.AXIS_STATE_FULL_CALIBRATION_SEQUENCE.value
+        'property' : AxisState.AXIS_STATE_ENCODER_OFFSET_CALIBRATION.value
+        # 'property' : AxisState.AXIS_STATE_FULL_CALIBRATION_SEQUENCE.value
     }
     if motor_number == 0:
         data['reqTarget'] = '/m0/requested_state'
@@ -848,6 +848,28 @@ def setThetaRef(server_ip, theta_ref):
     except socket.timeout: # fail after 1 second of no activity
         print("Didn't receive anymore data! [Timeout]")
 
+# AIOS transfer offset_lut to motor drive
+# Param: Server IP, index, data
+# return error
+def writeLUT(server_ip, index, lut):
+    data = {
+        'method' : 'GET',
+        'reqTarget' : '/passthrough',
+        'tx_messages' : 'ew 1 0 0 0 0 0 0 0 0 0\n'
+    }
+    tx_messages = 'ew 1 {0:d} {1:.2f} {2:.2f} {3:.2f} {4:.2f} {5:.2f} {6:.2f} {7:.2f} {8:.2f}\n'.format(index, lut[index], lut[index+1], lut[index+2], lut[index+3], lut[index+4], lut[index+5], lut[index+6], lut[index+7])
+    data['tx_messages'] = tx_messages
+    json_str = json.dumps(data)
+    print ("Send JSON Obj:", json_str)
+    s.sendto(str.encode(json_str), (server_ip, PORT_rt))
+    try:
+        data, address = s.recvfrom(1024)
+        # print('Server received from {}:{}'.format(address, data.decode('utf-8')))
+        json_obj = json.loads(data.decode('utf-8'))
+        rx_messages = json_obj.get('rx_messages')
+        return rx_messages
+    except socket.timeout: # fail after 1 second of no activity
+        print("Didn't receive anymore data! [Timeout]")
 
 def dum_func(server_ip):
     data = {
@@ -996,6 +1018,7 @@ def passthrough_pt(server_ip, tx_messages):
 # 参数：无
 # 返回 成功 失败 超时
 def broadcast_func():
+    print('Listening for broadcast at ', s.getsockname())
     timeout = 3
     found_server = False
     address_list = []

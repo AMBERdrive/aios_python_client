@@ -1,3 +1,4 @@
+import aios
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy import signal
@@ -43,11 +44,11 @@ raw_b = raw_b[::-1]
 raw = (raw_f + raw_b)/2
 
 for x in range(len(raw)):
-    if 668 <= x <= 672:
+    if 1308 <= x <= 1312:
         raw[x] = 0
     print(x, raw[x])
 
-raw = np.roll(raw,-2000)
+# raw = np.roll(raw,-2000)
 
 print("raw_offset = %d" %(raw_offset))
 
@@ -64,7 +65,10 @@ for i in range(n_lut):
     print(i, ind, lut[ind])
     time.sleep(0.001)
 
-offset_lut = lut
+# offset_lut = list(map(int, lut))
+offset_lut = [float('{:.2f}'.format(i)) for i in lut]
+
+print(offset_lut)
 raw_list = []
 offset_1_list = []
 offset_2_list = []
@@ -86,15 +90,31 @@ for i in range(n):
 
 
 
-
 # plt.plot(error)
 # error_filt = list(map(int,error_filt))
+# plt.plot(error)
 # plt.plot(error_filt)
-# plt.plot(lut)
-plt.plot(raw_list)
+plt.plot(lut)
+plt.plot(offset_lut)
+# plt.plot(raw_list)
 plt.plot(offset_2_list)
 plt.plot(off_interp_list)
-plt.ylabel('error_b')
-plt.show()
+# plt.plot(angle)
+# plt.plot(raw)
+# plt.plot(angle - raw)
+plt.ylabel('list')
+# plt.show()
+
+
+
+Server_IP_list = aios.broadcast_func()
+
+if Server_IP_list:
+        start = time.time()
+        for i in range(len(Server_IP_list)):
+            for j in range(16):
+                print(aios.writeLUT(Server_IP_list[i], j*8, offset_lut))
+        latency = time.time() - start
+        print(latency*1000)
 
 

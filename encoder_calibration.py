@@ -33,7 +33,7 @@ def main():
 
         print('\n')
 
-        time.sleep(10)
+        time.sleep(15)
 
         # for i in range(len(Server_IP_list)):
         #     aios.passthrough(Server_IP_list[i], "r axis1.encoder.config.offset\n")
