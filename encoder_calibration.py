@@ -34,23 +34,6 @@ def main():
         print('\n')
 
         time.sleep(15)
-
-        # for i in range(len(Server_IP_list)):
-        #     aios.passthrough(Server_IP_list[i], "r axis1.encoder.config.offset\n")
-        # print('\n')
-
-        # for i in range(len(Server_IP_list)):
-        #     aios.passthrough(Server_IP_list[i], "r axis1.encoder.count_in_cpr\n")
-        # print('\n')
-
-        # for i in range(len(Server_IP_list)):
-        #     aios.passthrough(Server_IP_list[i], "r axis1.encoder.shadow_count\n")
-        # print('\n')
-
-        # for i in range(len(Server_IP_list)):
-        #     aios.passthrough(Server_IP_list[i], "r axis1.encoder.is_ready\n")
-        # print('\n')
-
         for i in range(len(Server_IP_list)):
             aios.encoderIsReady(Server_IP_list[i], 1)
         print('\n')
