@@ -348,8 +348,8 @@ def encoderOffsetCalibration(server_ip, motor_number):
     data = {
         'method' : 'SET',
         'reqTarget' : '/m0/requested_state',
-        'property' : AxisState.AXIS_STATE_ENCODER_OFFSET_CALIBRATION.value
-        # 'property' : AxisState.AXIS_STATE_FULL_CALIBRATION_SEQUENCE.value
+        # 'property' : AxisState.AXIS_STATE_ENCODER_OFFSET_CALIBRATION.value
+        'property' : AxisState.AXIS_STATE_FULL_CALIBRATION_SEQUENCE.value
     }
     if motor_number == 0:
         data['reqTarget'] = '/m0/requested_state'
@@ -819,6 +819,28 @@ def getRefDistance(server_ip):
         distance = float(json_obj.get('rx_messages'))
         print("distance = %f\n" %(distance))
         return distance
+    except socket.timeout: # fail after 1 second of no activity
+        print("Didn't receive anymore data! [Timeout]")
+
+# AIOS get motor direction
+# Param: Server IP
+# return direction
+def getDirection(server_ip):
+    data = {
+        'method' : 'GET',
+        'reqTarget' : '/passthrough',
+        'tx_messages' : 'r axis1.motor.config.direction\n'
+    }
+    json_str = json.dumps(data)
+    print ("Send JSON Obj:", json_str)
+    s.sendto(str.encode(json_str), (server_ip, PORT_rt))
+    try:
+        data, address = s.recvfrom(1024)
+        # print('Server received from {}:{}'.format(address, data.decode('utf-8')))
+        json_obj = json.loads(data.decode('utf-8'))
+        rx_messages = json_obj.get('rx_messages')
+        direction = int(rx_messages)
+        return direction
     except socket.timeout: # fail after 1 second of no activity
         print("Didn't receive anymore data! [Timeout]")
 

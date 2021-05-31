@@ -44,7 +44,7 @@ def main():
 
                 for i in range(1200):
                     start = time.time()
-                    pos = np.sin(i*0.009*np.pi)*6
+                    pos = np.sin(i*0.006*np.pi)*15
                     for j in range(len(Server_IP_list)):
                         aios.passthrough(Server_IP_list[j], 'p 1 {0:f}\nf 1\n'.format(pos))
                         # aios.passthrough_pt(Server_IP_list[j], 'f 1\n')

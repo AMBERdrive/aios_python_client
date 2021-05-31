@@ -25,15 +25,15 @@ def main():
         print('\n')
 
         for i in range(len(Server_IP_list)):
-            aios.passthrough(Server_IP_list[i], "w axis1.config.general_lockin.finish_distance 10000\n") # 1600
+            aios.passthrough(Server_IP_list[i], "w axis1.config.general_lockin.finish_distance 100000000\n") # 1600
         print('\n')
 
         for i in range(len(Server_IP_list)):
-            aios.passthrough(Server_IP_list[i], "w axis1.config.general_lockin.vel 100\n") # 1600
+            aios.passthrough(Server_IP_list[i], "w axis1.config.general_lockin.vel 16000\n") # 1600
         print('\n')
 
         for i in range(len(Server_IP_list)):
-            aios.passthrough(Server_IP_list[i], "w axis1.config.general_lockin.accel 100\n") # 400
+            aios.passthrough(Server_IP_list[i], "w axis1.config.general_lockin.accel 400\n") # 400
         print('\n')
 
         for i in range(len(Server_IP_list)):

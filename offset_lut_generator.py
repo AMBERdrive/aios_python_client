@@ -21,6 +21,7 @@ error_f = np.load('error_f.npy')
 error_b = np.load('error_b.npy')
 raw_f = np.load('raw_f.npy')
 raw_b = np.load('raw_b.npy')
+direction = np.load('direction.npy')
 
 error_b = error_b[::-1]
 
@@ -43,10 +44,10 @@ raw_offset = (raw_f[0] + raw_b[n-1])/2
 raw_b = raw_b[::-1]
 raw = (raw_f + raw_b)/2
 
-for x in range(len(raw)):
-    if 1308 <= x <= 1312:
-        raw[x] = 0
-    print(x, raw[x])
+# for x in range(len(raw)):
+#     if 1308 <= x <= 1312:
+#         raw[x] = 0
+#     print(x, raw[x])
 
 # raw = np.roll(raw,-2000)
 
@@ -75,7 +76,7 @@ offset_2_list = []
 off_interp_list = []
 angle = []
 
-# For test, simulate when this code running in STM32
+# For test, simulate when this code running on STM32
 for i in range(n):
     raw_ = int(raw[i]/31.25)
     raw_list.append(raw_)
@@ -89,11 +90,19 @@ for i in range(n):
 
 
 
+if direction < 0:
+    offset_lut = offset_lut[::-1]
+    offset_lut = [ -x for x in offset_lut]
 
-# plt.plot(error)
+    
+
+print(offset_lut)
+
+
+plt.plot(error)
 # error_filt = list(map(int,error_filt))
 # plt.plot(error)
-# plt.plot(error_filt)
+plt.plot(error_filt)
 plt.plot(lut)
 plt.plot(offset_lut)
 # plt.plot(raw_list)
@@ -103,9 +112,10 @@ plt.plot(off_interp_list)
 # plt.plot(raw)
 # plt.plot(angle - raw)
 plt.ylabel('list')
-# plt.show()
+plt.show()
 
-
+print("\n")
+print("motor direction is {:d}".format(direction))
 
 Server_IP_list = aios.broadcast_func()
 

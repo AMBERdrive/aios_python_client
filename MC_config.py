@@ -22,10 +22,10 @@ def main():
         print('\n')
 
         dict = {
-            'pos_gain' : 50,
-            'vel_gain' : 0.0002,
-            'vel_integrator_gain' : 0.0002,
-            'vel_limit' : 400000,
+            'pos_gain' : 80.0,
+            'vel_gain' : 0.08,
+            'vel_integrator_gain' : 0.04,
+            'vel_limit' : 40.0,
             'vel_limit_tolerance' : 1.2,
         }
         for i in range(len(Server_IP_list)):

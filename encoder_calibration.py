@@ -33,7 +33,7 @@ def main():
 
         print('\n')
 
-        time.sleep(13)
+        time.sleep(15)
         for i in range(len(Server_IP_list)):
             aios.encoderIsReady(Server_IP_list[i], 1)
         print('\n')

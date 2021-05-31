@@ -30,6 +30,9 @@ def main():
     if Server_IP_list:
 
         for i in range(len(Server_IP_list)):
+            direction = aios.getDirection(Server_IP_list[i])
+
+        for i in range(len(Server_IP_list)):
             aios.passthrough(Server_IP_list[i], "w axis1.requested_state 12\n")  # 7
         print('\n')
 
@@ -57,7 +60,7 @@ def main():
             raw_f.append(count_in_cpr)
             shadow_count_list.append(shadow_count)
             print(count_in_cpr, shadow_count)
-            error_f.append(theta_ref_count - shadow_count)
+            error_f.append(theta_ref_count - direction * shadow_count)
 
         i = 0
         j = 0
@@ -78,7 +81,7 @@ def main():
             raw_b.append(count_in_cpr)
             shadow_count_list.append(shadow_count)
             # print(count_in_cpr, shadow_count)
-            error_b.append(theta_ref_count - shadow_count)
+            error_b.append(theta_ref_count - direction * shadow_count)
 
 
 
@@ -90,6 +93,7 @@ def main():
         np.save('error_b.npy',error_b)
         np.save('raw_f.npy',raw_f)  
         np.save('raw_b.npy',raw_b) 
+        np.save('direction.npy',direction)
 
         # print(theta_ref_list)
         # print(shadow_count_list)
