@@ -32,6 +32,8 @@ def main():
         for i in range(len(Server_IP_list)):
             direction = aios.getDirection(Server_IP_list[i])
 
+        print("motor direction is {:d}".format(direction))
+
         for i in range(len(Server_IP_list)):
             aios.passthrough(Server_IP_list[i], "w axis1.requested_state 12\n")  # 7
         print('\n')
@@ -60,7 +62,7 @@ def main():
             raw_f.append(count_in_cpr)
             shadow_count_list.append(shadow_count)
             print(count_in_cpr, shadow_count)
-            error_f.append(theta_ref_count - direction * shadow_count)
+            error_f.append(theta_ref_count - shadow_count)
 
         i = 0
         j = 0
@@ -81,7 +83,7 @@ def main():
             raw_b.append(count_in_cpr)
             shadow_count_list.append(shadow_count)
             # print(count_in_cpr, shadow_count)
-            error_b.append(theta_ref_count - direction * shadow_count)
+            error_b.append(theta_ref_count - shadow_count)
 
 
 

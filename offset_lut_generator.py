@@ -90,9 +90,9 @@ for i in range(n):
 
 
 
-if direction < 0:
-    offset_lut = offset_lut[::-1]
-    offset_lut = [ -x for x in offset_lut]
+# if direction < 0:
+#     offset_lut = offset_lut[::-1]
+#     offset_lut = [ -x for x in offset_lut]
 
     
 
@@ -119,11 +119,18 @@ print("motor direction is {:d}".format(direction))
 
 Server_IP_list = aios.broadcast_func()
 
+# if Server_IP_list:
+#         start = time.time()
+#         for i in range(len(Server_IP_list)):
+#             for j in range(16):
+#                 print(aios.writeLUTpt(Server_IP_list[i], j*8, offset_lut))
+#         latency = time.time() - start
+#         print(latency*1000)
+
 if Server_IP_list:
         start = time.time()
         for i in range(len(Server_IP_list)):
-            for j in range(16):
-                print(aios.writeLUT(Server_IP_list[i], j*8, offset_lut))
+            aios.writeLUT(Server_IP_list[i], offset_lut)
         latency = time.time() - start
         print(latency*1000)
 

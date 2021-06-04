@@ -869,10 +869,10 @@ def setThetaRef(server_ip, theta_ref):
     except socket.timeout: # fail after 1 second of no activity
         print("Didn't receive anymore data! [Timeout]")
 
-# AIOS transfer offset_lut to motor drive
+# AIOS transfer offset_lut to motor drive via passthrough method
 # Param: Server IP, index, data
 # return error
-def writeLUT(server_ip, index, lut):
+def writeLUTpt(server_ip, index, lut):
     data = {
         'method' : 'GET',
         'reqTarget' : '/passthrough',
@@ -886,6 +886,27 @@ def writeLUT(server_ip, index, lut):
     try:
         data, address = s.recvfrom(1024)
         # print('Server received from {}:{}'.format(address, data.decode('utf-8')))
+        json_obj = json.loads(data.decode('utf-8'))
+        rx_messages = json_obj.get('rx_messages')
+        return rx_messages
+    except socket.timeout: # fail after 1 second of no activity
+        print("Didn't receive anymore data! [Timeout]")
+
+# AIOS transfer offset_lut to motor drive to the ESP32 file system
+# Param: Server IP, index, data
+# return error
+def writeLUT(server_ip, lut):
+    data = {
+        'method' : 'SET',
+        'reqTarget' : '/encoder/offset_lut'
+    }
+    data['offset_lut'] = lut
+    json_str = json.dumps(data)
+    print ("Send JSON Obj:", json_str)
+    s.sendto(str.encode(json_str), (server_ip, PORT_srv))
+    try:
+        data, address = s.recvfrom(1024)
+        print('Server received from {}:{}'.format(address, data.decode('utf-8')))
         json_obj = json.loads(data.decode('utf-8'))
         rx_messages = json_obj.get('rx_messages')
         return rx_messages
