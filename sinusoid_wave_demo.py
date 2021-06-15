@@ -42,7 +42,7 @@ def main():
                     aios.trapezoidalMove(0, False, Server_IP_list[i], 1)
                 time.sleep( 3 )
 
-                for i in range(1200):
+                for i in range(120):
                     start = time.time()
                     pos = np.sin(i*0.006*np.pi)*32000
                     for j in range(len(Server_IP_list)):
