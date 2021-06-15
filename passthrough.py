@@ -3,8 +3,8 @@ import time
 import threading
 import numpy as np
 
-Server_IP_list = ['192.168.5.48']
-# Server_IP_list = []
+# Server_IP_list = ['192.168.5.48']
+Server_IP_list = []
 
 
 
@@ -73,9 +73,21 @@ def main():
         #     aios.passthrough(Server_IP_list[i], "r config.dc_bus_undervoltage_trip_level\n")
         # print('\n')
 
-        # for i in range(len(Server_IP_list)):
-        #     aios.passthrough(Server_IP_list[i], "r axis1.encoder.config.offset\n")
-        # print('\n')
+        for i in range(len(Server_IP_list)):
+            aios.passthrough(Server_IP_list[i], "r axis1.encoder.config.offset\n")
+        print('\n')
+
+        for i in range(len(Server_IP_list)):
+            aios.passthrough(Server_IP_list[i], "r axis1.encoder.config.offset_float\n")
+        print('\n')
+
+        for i in range(len(Server_IP_list)):
+            aios.passthrough(Server_IP_list[i], "r axis1.encoder.count_in_cpr\n")
+        print('\n')
+
+        for i in range(len(Server_IP_list)):
+            aios.passthrough(Server_IP_list[i], "r axis1.encoder.shadow_count\n")
+        print('\n')
         # for i in range(len(Server_IP_list)):
         #     aios.passthrough(Server_IP_list[i], "w axis1.controller.config.vel_ramp_rate 400000.00\n")
         # print('\n')
@@ -84,9 +96,9 @@ def main():
         #     aios.passthrough(Server_IP_list[i], "r axis1.controller.config.vel_ramp_rate\n")
         # print('\n')
 
-        # for i in range(len(Server_IP_list)):
-        #     aios.passthrough(Server_IP_list[i], "r axis1.motor.config.direction\n")
-        # print('\n')
+        for i in range(len(Server_IP_list)):
+            aios.passthrough(Server_IP_list[i], "r axis1.motor.config.direction\n")
+        print('\n')
 
         # for i in range(len(Server_IP_list)):
         #     aios.passthrough(Server_IP_list[i], "if\n")
@@ -164,13 +176,13 @@ def main():
         #     aios.passthrough(Server_IP_list[i], "r axis1.error\n")
         # print('\n')
 
-        for i in range(len(Server_IP_list)):
-            aios.passthrough(Server_IP_list[i], "r axis1.motor.error\n")
-        print('\n')
+        # for i in range(len(Server_IP_list)):
+        #     aios.passthrough(Server_IP_list[i], "r axis1.motor.error\n")
+        # print('\n')
 
-        for i in range(len(Server_IP_list)):
-            aios.passthrough(Server_IP_list[i], "r axis1.motor.gate_driver.drv_fault\n")
-        print('\n')
+        # for i in range(len(Server_IP_list)):
+        #     aios.passthrough(Server_IP_list[i], "r axis1.motor.gate_driver.drv_fault\n")
+        # print('\n')
 
         # for i in range(len(Server_IP_list)):
         #     aios.passthrough(Server_IP_list[i], "r axis1.encoder.error\n")

@@ -6,13 +6,13 @@ import json
 import colorama
 from colorama import Fore, Back, Style
 
-# Server_IP_list = ['192.168.5.126']
-Server_IP_list = []
+Server_IP_list = ['192.168.11.70']
+# Server_IP_list = []
 
 
 def main():
 
-    Server_IP_list = aios.broadcast_func()
+    # Server_IP_list = aios.broadcast_func()
     
     if Server_IP_list:
 
