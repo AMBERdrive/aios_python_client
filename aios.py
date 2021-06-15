@@ -44,7 +44,7 @@ PORT_pt = 10000 # Passthrough port
 
 # network = '10.0.0.255'
 # network = '255.255.255.255'
-network = '192.168.2.255'
+network = '192.168.102.255'
 
 
 # AIOS enable

@@ -26,12 +26,12 @@ def main():
         print('\n')
 
         dict = {
-            'current_lim' : 8,
+            'current_lim' : 40,
             'current_lim_margin' : 5,
             'inverter_temp_limit_lower' : 80,
             'inverter_temp_limit_upper' : 90,
-            'requested_current_range' : 30,
-            'current_control_bandwidth' : 500,
+            'requested_current_range' : 60,
+            'current_control_bandwidth' : 1000,
         }
         for i in range(len(Server_IP_list)):
             aios.setMotorConfig(dict, Server_IP_list[i], 1)

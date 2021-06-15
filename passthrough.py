@@ -22,13 +22,13 @@ def main():
         # print('\n')
 
 
-        for i in range(len(Server_IP_list)):
-            aios.passthrough(Server_IP_list[i], "r axis1.encoder.is_ready\n")
-        print('\n')
+        # for i in range(len(Server_IP_list)):
+        #     aios.passthrough(Server_IP_list[i], "r axis1.encoder.is_ready\n")
+        # print('\n')
 
-        for i in range(len(Server_IP_list)):
-            aios.passthrough(Server_IP_list[i], "w axis1.encoder.config.cpr 4096\n")
-        print('\n')
+        # for i in range(len(Server_IP_list)):
+        #     aios.passthrough(Server_IP_list[i], "w axis1.encoder.config.cpr 4096\n")
+        # print('\n')
 
         # for i in range(len(Server_IP_list)):
         #     aios.passthrough(Server_IP_list[i], "w axis1.requested_state 8\n")
@@ -146,8 +146,12 @@ def main():
         # print('\n')
 
         # for i in range(len(Server_IP_list)):
-        #     aios.passthrough(Server_IP_list[i], "w axis1.motor.error 0\n")
+        #     aios.passthrough(Server_IP_list[i], "r axis1.motor.error\n")
         # print('\n')
+
+        for i in range(len(Server_IP_list)):
+            aios.passthrough(Server_IP_list[i], "r axis1.motor.fet_thermistor.temperature\n")
+        print('\n')
 
         # for i in range(len(Server_IP_list)):
         #     aios.passthrough(Server_IP_list[i], "r axis1.motor.gate_driver.drv_fault\n")
@@ -197,13 +201,6 @@ def main():
         #     aios.passthrough(Server_IP_list[i], "r axis1.error\n")
         # print('\n')
 
-        for i in range(len(Server_IP_list)):
-            aios.passthrough(Server_IP_list[i], "r axis1.motor.error\n")
-        print('\n')
-
-        for i in range(len(Server_IP_list)):
-            aios.passthrough(Server_IP_list[i], "r axis1.motor.gate_driver.drv_fault\n")
-        print('\n')
 
         # for i in range(len(Server_IP_list)):
         #     aios.passthrough(Server_IP_list[i], "r axis1.encoder.error\n")
@@ -216,7 +213,7 @@ def main():
         # for j in range(4000):
         #     for i in range(len(Server_IP_list)):
         #         start = time.time()
-        #         aios.passthrough(Server_IP_list[i], "r axis1.encoder.count_in_cpr\n")
+        #         aios.passthrough(Server_IP_list[i], "p 1 1.0\n")
         #         latency = time.time() - start
         #         print(latency*1000)
         #     print('\n')
