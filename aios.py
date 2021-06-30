@@ -5,6 +5,7 @@ import json
 import numpy as np
 from enum import Enum
 from math import *
+import struct
 
 # Initialize the actuator state
 class AxisState(Enum):
@@ -44,7 +45,7 @@ PORT_pt = 10000 # Passthrough port
 
 # network = '10.0.0.255'
 # network = '255.255.255.255'
-network = '192.168.102.255'
+network = '192.168.2.255'
 
 
 # AIOS enable
@@ -407,6 +408,31 @@ def controlMode(ctrlMode, server_ip, motor_number):
         data['reqTarget'] = '/m1/controller/config'
 
     data['control_mode'] = ctrlMode
+    json_str = json.dumps(data)
+    print ("Send JSON Obj:", json_str)
+    s.sendto(str.encode(json_str), (server_ip, PORT_srv))
+    try:
+        data, address = s.recvfrom(1024)
+        print('Server received from {}:{}'.format(address, data.decode('utf-8')))
+        json_obj = json.loads(data.decode('utf-8'))
+    except socket.timeout: # fail after 1 second of no activity
+        print("Didn't receive anymore data! [Timeout]")
+
+# AIOS set input mode
+# Parameters: including server ip，motor number
+# no return code
+def inputMode(inputMode, server_ip, motor_number):
+    data = {
+        'method' : 'SET',
+        'reqTarget' : '/m0/controller/config',
+        'control_mode' : 3
+    }
+    if motor_number == 0:
+        data['reqTarget'] = '/m0/controller/config'
+    elif motor_number == 1:
+        data['reqTarget'] = '/m1/controller/config'
+
+    data['input_mode'] = inputMode
     json_str = json.dumps(data)
     print ("Send JSON Obj:", json_str)
     s.sendto(str.encode(json_str), (server_ip, PORT_srv))
@@ -1072,6 +1098,21 @@ def passthrough_pt(server_ip, tx_messages):
         data, address = s.recvfrom(1024)
         print('Server received from {}:{}'.format(address, data.decode('utf-8')))
         # print('Server received from {}:{}'.format(address, data.hex()))
+    except socket.timeout: # fail after 1 second of no activity
+        print("Didn't receive anymore data! [Timeout]")
+
+# AIOS passthrough pt_port binary
+# 参数：包括设备IP 电机号
+# 无返回
+def passthrough_pt_bin(server_ip, cmd, position, velocity, torque):
+    tx_messages = struct.pack('<Bfhh', cmd, position, velocity, torque)
+    print ("Send Data:", tx_messages)
+    s.sendto(tx_messages, (server_ip, PORT_pt))
+    try:
+        data, address = s.recvfrom(1024)
+        print('Server received from {}:{}'.format(address, data))
+        feedback = struct.unpack('<fffi', data[1:17])
+        return feedback
     except socket.timeout: # fail after 1 second of no activity
         print("Didn't receive anymore data! [Timeout]")
         

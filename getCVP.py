@@ -20,7 +20,7 @@ def main():
             latency = time.time() - start
             print(latency*1000)
 
-            time.sleep(0.1)
+            time.sleep(0.005)
 
 
 

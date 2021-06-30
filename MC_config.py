@@ -23,7 +23,7 @@ def main():
 
         dict = {
             'pos_gain' : 80.0,
-            'vel_gain' : 0.08,
+            'vel_gain' : 0.6,
             'vel_integrator_gain' : 0.04,
             'vel_limit' : 40.0,
             'vel_limit_tolerance' : 1.2,

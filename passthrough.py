@@ -14,6 +14,12 @@ def main():
     if Server_IP_list:
 
         for i in range(len(Server_IP_list)):
+            aios.passthrough_pt(Server_IP_list[i], 't 1 0\n')
+        print('\n')
+
+        time.sleep(2)
+
+        for i in range(len(Server_IP_list)):
             aios.passthrough(Server_IP_list[i], "r vbus_voltage\n")
         print('\n')
 
@@ -150,7 +156,12 @@ def main():
         # print('\n')
 
         for i in range(len(Server_IP_list)):
-            aios.passthrough(Server_IP_list[i], "r axis1.motor.fet_thermistor.temperature\n")
+            aios.passthrough(Server_IP_list[i], "r axis1.fet_thermistor.temperature\n")
+        print('\n')
+
+
+        for i in range(len(Server_IP_list)):
+            aios.passthrough(Server_IP_list[i], "r axis1.controller.config.input_mode\n")
         print('\n')
 
         # for i in range(len(Server_IP_list)):

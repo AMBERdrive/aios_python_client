@@ -27,7 +27,7 @@ def main():
                 # 'SSID' : 'TP-LINK_CUI',
                 # 'password' : '2.718281828',
                 'name' : name,
-                'staticIP' : [192,168,2,i+10],
+                'staticIP' : [192,168,2,i+50],
                 'gateway' : [192,168,2,1],
                 'subnet' : [255,255,255,0],
                 'dns_1' : [114,114,114,114],

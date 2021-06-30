@@ -121,19 +121,21 @@ print("motor direction is {:d}".format(direction))
 
 Server_IP_list = aios.broadcast_func()
 
-if Server_IP_list:
-        start = time.time()
-        for i in range(len(Server_IP_list)):
-            for j in range(16):
-                print(aios.writeLUTpt(Server_IP_list[i], j*8, offset_lut))
-        latency = time.time() - start
-        print(latency*1000)
 
-# if Server_IP_list:
+# if Server_IP_list:                                    # Write LUT directly to Motor Drive
 #         start = time.time()
 #         for i in range(len(Server_IP_list)):
-#             aios.writeLUT(Server_IP_list[i], offset_lut)
+#             for j in range(16):
+#                 print(aios.writeLUTpt(Server_IP_list[i], j*8, offset_lut))
 #         latency = time.time() - start
 #         print(latency*1000)
+
+
+if Server_IP_list:                                  # Write LUT to ESP32 SPIFFS
+        start = time.time()
+        for i in range(len(Server_IP_list)):
+            aios.writeLUT(Server_IP_list[i], offset_lut)
+        latency = time.time() - start
+        print(latency*1000)
 
 
